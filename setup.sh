@@ -68,7 +68,7 @@ sudo systemctl restart apache2
 # download wordpress
 sudo mkdir tmp
 cd tmp
-curl -O https://wordpress.org/latest.tar.gz
+sudo curl -O https://wordpress.org/latest.tar.gz
 sudo tar xzvf latest.tar.gz
 sudo touch /home/cgoddard/tmp/wordpress/.htaccess
 sudo chmod 660 /home/cgoddard/tmp/wordpress/.htaccess
@@ -158,3 +158,8 @@ sudo a2dissite tweetysoap.conf
 sudo systemctl restart apache2
 
 # install woocommerce
+# note that we are still in /Users/cgoddard/tmp
+sudo apt-get install unzip
+sudo curl -O https://downloads.wordpress.org/plugin/woocommerce.4.4.1.zip
+sudo unzip woocommerce.4.4.1.zip
+sudo mv woocommerce /var/www/html/wp-content/plugins/
