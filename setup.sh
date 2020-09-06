@@ -5,7 +5,7 @@
 # curl -O -L https://raw.githubusercontent.com/token-cjg/hello_wordpress/master/setup.sh
 
 # purge first!
-sudo apt-get purge -y apache2
+sudo apt-get purge -y apache2 mysql-server
 
 # apache2
 sudo apt-get update
@@ -14,28 +14,28 @@ sudo ufw allow in "Apache Full"
 
 # mysql
 sudo apt-get install -y mysql-server expect
-SECURE_MYSQL=$(expect -c "
-set timeout 10
-spawn mysql_secure_installation
-expect \"Would you like to setup VALIDATE PASSWORD plugin?\"
-send \"n\r\"
-expect \"Enter current password for root (enter for none):\"
-send \"$MYSQL\r\"
-expect \"Change the root password?\"
-send \"n\r\"
-expect \"Remove anonymous users?\"
-send \"y\r\"
-expect \"Disallow root login remotely?\"
-send \"y\r\"
-expect \"Remove test database and access to it?\"
-send \"y\r\"
-expect \"Reload privilege tables now?\"
-send \"y\r\"
-expect eof
-")
-
-echo "$SECURE_MYSQL"
-sudo apt-get purge -y expect
+# SECURE_MYSQL=$(expect -c "
+# set timeout 10
+# spawn mysql_secure_installation
+# expect \"Would you like to setup VALIDATE PASSWORD plugin?\"
+# send \"n\r\"
+# expect \"Please set the password for root here:\"
+# send \"root\r\"
+# expect \"Re-enter new password\"
+# send \"root\r\"
+# expect \"Remove anonymous users?\"
+# send \"y\r\"
+# expect \"Disallow root login remotely?\"
+# send \"y\r\"
+# expect \"Remove test database and access to it?\"
+# send \"y\r\"
+# expect \"Reload privilege tables now?\"
+# send \"y\r\"
+# expect eof
+# ")
+#
+# echo "$SECURE_MYSQL"
+# sudo apt-get purge -y expect
 
 # php
 sudo apt-get install -y php libapache2-mod-php php-mysql
@@ -59,5 +59,8 @@ sudo a2dissite 000-default.conf
 sudo systemctl restart apache2
 
 # test php
-curl -O -L https://raw.githubusercontent.com/token-cjg/hello_wordpress/master/fixtures/info.php
-sudo mv info.php /var/www/tweetysoap/info.php
+# curl -O -L https://raw.githubusercontent.com/token-cjg/hello_wordpress/master/fixtures/info.php
+# sudo mv info.php /var/www/tweetysoap/info.php
+# sudo rm /var/www/tweetysoap/info.php
+
+mysql -u root -p -e "SQL_QUERY"
