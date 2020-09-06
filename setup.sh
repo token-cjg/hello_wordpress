@@ -151,7 +151,6 @@ if ( !defined('ABSPATH') )
 
 require_once(ABSPATH . 'wp-settings.php');
 EOF
-exit
 
 sudo cp /home/cgoddard/tmp/wordpress/wp-config-sample.php /var/www/html/wp-config.php
 sudo a2dissite tweetysoap.conf
@@ -163,3 +162,11 @@ sudo apt-get install unzip
 sudo curl -O https://downloads.wordpress.org/plugin/woocommerce.4.4.1.zip
 sudo unzip woocommerce.4.4.1.zip
 sudo mv woocommerce /var/www/html/wp-content/plugins/
+
+# activate woocommerce from the command line (https://perishablepress.com/activate-wordpress-plugin-database/)
+# get the serialised array of plugin options
+mysql -uroot -proot -e "use wordpress; SELECT option_value FROM ${TablePrefx}_options WHERE option_name = 'active_plugins';" > output
+PLUGIN_ARRAY=$(sed '2q;d' output) # originally 'a:0:{}'
+NEW_PLUGIN_ARRAY='a:1:{i:0;s:27:"woocommerce/woocommerce.php";}'
+mysql -uroot -proot -e "use wordpress; UPDATE ${TablePrefx}_options SET option_value = '${NEW_PLUGIN_ARRAY}' WHERE option_name = 'active_plugins';"
+exit
