@@ -116,9 +116,9 @@ cat <<EOF > /home/cgoddard/tmp/wordpress/wp-config-sample.php
 <?php
 /***Managed by Kaiten Support - Leonardo Gandini***/
 
-define('DB_NAME', '');
-define('DB_USER', '');
-define('DB_PASSWORD', '');
+define('DB_NAME', 'wordpress');
+define('DB_USER', 'wordpressuser');
+define('DB_PASSWORD', 'wordpressuserpassword');
 define('DB_HOST', 'localhost');
 define('DB_CHARSET', 'utf8');
 define('DB_COLLATE', '');
@@ -142,14 +142,6 @@ $WPSalts
 
 \$table_prefix = '$TablePrefx';
 
-define('DB_NAME', 'wordpress');
-
-/** MySQL database username */
-define('DB_USER', 'wordpressuser');
-
-/** MySQL database password */
-define('DB_PASSWORD', 'wordpressuserpassword');
-
 define('FS_METHOD', 'direct');
 
 define('WP_DEBUG', false);
@@ -162,3 +154,4 @@ EOF
 exit
 
 sudo cp /home/cgoddard/tmp/wordpress/wp-config-sample.php /var/www/html/wp-config.php
+sudo systemctl restart apache2
