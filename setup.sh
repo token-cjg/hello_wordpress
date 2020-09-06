@@ -14,28 +14,9 @@ sudo ufw allow in "Apache Full"
 
 # mysql
 sudo apt-get install -y mysql-server expect
-# SECURE_MYSQL=$(expect -c "
-# set timeout 10
-# spawn mysql_secure_installation
-# expect \"Would you like to setup VALIDATE PASSWORD plugin?\"
-# send \"n\r\"
-# expect \"Please set the password for root here:\"
-# send \"root\r\"
-# expect \"Re-enter new password\"
-# send \"root\r\"
-# expect \"Remove anonymous users?\"
-# send \"y\r\"
-# expect \"Disallow root login remotely?\"
-# send \"y\r\"
-# expect \"Remove test database and access to it?\"
-# send \"y\r\"
-# expect \"Reload privilege tables now?\"
-# send \"y\r\"
-# expect eof
-# ")
-#
-# echo "$SECURE_MYSQL"
-# sudo apt-get purge -y expect
+curl -O -L https://raw.githubusercontent.com/token-cjg/hello_wordpress/master/mysql_secure.sh
+sudo chmod +x mysql_secure.sh
+sudo ./mysql_secure.sh 'root'
 
 # php
 sudo apt-get install -y php libapache2-mod-php php-mysql
