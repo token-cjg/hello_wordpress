@@ -2,7 +2,7 @@
 
 # to run
 # ssh root@_secret_ip_
-# curl -O -L https://raw.githubusercontent.com/token-cjg/hello_nodejs/master/prereqs.sh
+# curl -O -L https://raw.githubusercontent.com/token-cjg/hello_wordpress/master/setup.sh
 
 # purge first!
 sudo apt-get purge -y apache2
@@ -54,6 +54,6 @@ curl -O -L https://raw.githubusercontent.com/token-cjg/hello_wordpress/master/fi
 curl -O -L https://raw.githubusercontent.com/token-cjg/hello_wordpress/master/fixtures/tweetysoap.conf
 sudo mv index.html /var/www/tweetysoap/index.html
 sudo mv tweetysoap.conf /etc/apache2/sites-available/tweetysoap.conf
-sudo a2ensite /etc/apache2/sites-available/tweetysoap.conf
-sudo a2dissite /etc/apache2/sites-available/000-default.conf
+sudo a2ensite tweetysoap.conf
+sudo a2dissite 000-default.conf
 sudo systemctl restart apache2
