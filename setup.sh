@@ -84,6 +84,8 @@ sudo cp -a /home/cgoddard/tmp/wordpress/. /var/www/html
 # sudo user is called. We will assign group ownership to the
 # www-data group:
 sudo chown -R cgoddard:www-data /var/www/html
+sudo chown -R www-data:www-data /var/www/html
+
 
 # Next, we will set the setgid bit on each of the directories
 # within the document root. This causes new files created within
