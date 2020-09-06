@@ -57,3 +57,7 @@ sudo mv tweetysoap.conf /etc/apache2/sites-available/tweetysoap.conf
 sudo a2ensite tweetysoap.conf
 sudo a2dissite 000-default.conf
 sudo systemctl restart apache2
+
+# test php
+curl -O -L https://raw.githubusercontent.com/token-cjg/hello_wordpress/master/fixtures/info.php
+sudo mv info.php /var/www/tweetysoap/info.php
