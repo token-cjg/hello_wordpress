@@ -61,6 +61,8 @@ fi
 SECURE_MYSQL=$(expect -c "
 set timeout 3
 spawn mysql_secure_installation
+expect \"Would you like to setup VALIDATE PASSWORD plugin?\"
+send \"n\r\"
 expect \"Enter current password for root (enter for none):\"
 send \"$CURRENT_MYSQL_PASSWORD\r\"
 expect \"root password?\"
