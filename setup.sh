@@ -154,4 +154,7 @@ EOF
 exit
 
 sudo cp /home/cgoddard/tmp/wordpress/wp-config-sample.php /var/www/html/wp-config.php
+sudo a2dissite tweetysoap.conf
 sudo systemctl restart apache2
+
+# install woocommerce
