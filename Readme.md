@@ -1,5 +1,7 @@
 ## Setting up wordpress on a LAMP stack
 
+Ubuntu 18.04, mysql 5.7.
+
 ### Getting started
 
 1. Create a VM and open ports 22, 80, and 443.
