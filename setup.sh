@@ -5,48 +5,55 @@
 # curl -O -L https://raw.githubusercontent.com/token-cjg/hello_nodejs/master/prereqs.sh
 
 # purge first!
-sudo apt-get purge -y nginx nginx-common
+sudo apt-get purge -y apache2
 
-# nginx
-sudo apt-get install -y nginx
-sudo ufw allow 'Nginx Full'
-sudo ufw allow ssh
-sudo ufw --force enable
-sudo ufw status
-sudo systemctl status nginx
+# apache2
+sudo apt-get update
+sudo apt-get install -y apache2
+sudo ufw allow in "Apache Full"
 
-# nginx, use our defined default file instead
-sudo mv /etc/nginx/sites-enabled/default /etc/nginx/sites-available
-curl -O -L https://raw.githubusercontent.com/token-cjg/hello_nodejs/master/fixtures/nginx-default
-sudo mv nginx-default /etc/nginx/sites-enabled/default
+# mysql
+sudo apt-get install -y mysql-server expect
+SECURE_MYSQL=$(expect -c "
+set timeout 10
+spawn mysql_secure_installation
+expect \"Would you like to setup VALIDATE PASSWORD plugin?\"
+send \"n\r\"
+expect \"Enter current password for root (enter for none):\"
+send \"$MYSQL\r\"
+expect \"Change the root password?\"
+send \"n\r\"
+expect \"Remove anonymous users?\"
+send \"y\r\"
+expect \"Disallow root login remotely?\"
+send \"y\r\"
+expect \"Remove test database and access to it?\"
+send \"y\r\"
+expect \"Reload privilege tables now?\"
+send \"y\r\"
+expect eof
+")
 
-# # nginx, HTTPS /w lets encrypt
-# # note, need a domain - get one from freenom
-# sudo add-apt-repository ppa:certbot/certbot -y
-# sudo apt-get update -y
-# sudo apt-get install python-certbot-nginx -y
-# sudo nginx -t
-# sudo systemctl reload nginx
-# sudo certbot --nginx -d groklemins.tk --keep-until-expiring --no-redirect --register-unsafely-without-email --agree-tos
-# # sudo certbot renew --dry-run
+echo "$SECURE_MYSQL"
+sudo apt-get purge -y expect
 
-# nodejs
-cd ~
-curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
-sudo bash nodesource_setup.sh
-sudo apt-get install -y nodejs
-sudo apt-get install -y build-essential
+# php
+sudo apt-get install -y php libapache2-mod-php php-mysql
 
-# install PM2
-sudo npm install -g pm2
+sudo mv /etc/apache2/mods-enabled/dir.conf /etc/apache2/mods-enabled/dir_orig.conf
+curl -O -L https://raw.githubusercontent.com/token-cjg/hello_wordpress/master/fixtures/dir.conf
+sudo mv dir.conf /etc/apache2/mods-enabled/dir.conf
 
-# # clone helloworld nodejs and run in background
-# curl -O -L https://raw.githubusercontent.com/token-cjg/hello_nodejs/master/fixtures/hello.js
-# sudo chmod +x ./hello.js
-# pm2 start hello.js
-# sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u cgoddard --hp /home/cgoddard
-# systemctl status pm2-cgoddard
+sudo systemctl restart apache2
 
-# check nginx
-sudo nginx -t
-sudo systemctl restart nginx
+# set up virtual hosts
+sudo mkdir /var/www/tweetysoap
+sudo chown -R $USER:$USER /var/www/tweetysoap
+sudo chmod -R 755 /var/www/tweetysoap
+curl -O -L https://raw.githubusercontent.com/token-cjg/hello_wordpress/master/fixtures/index.html
+curl -O -L https://raw.githubusercontent.com/token-cjg/hello_wordpress/master/fixtures/tweetysoap.conf
+sudo mv index.html /var/www/tweetysoap/index.html
+sudo mv tweetysoap.conf /etc/apache2/sites-available/tweetysoap.conf
+sudo a2ensite /etc/apache2/sites-available/tweetysoap.conf
+sudo a2dissite /etc/apache2/sites-available/000-default.conf
+sudo systemctl restart apache2
