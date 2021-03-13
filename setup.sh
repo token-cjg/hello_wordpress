@@ -172,3 +172,13 @@ PLUGIN_ARRAY=$(sed '2q;d' output) # originally 'a:0:{}'
 NEW_PLUGIN_ARRAY='a:1:{i:0;s:27:"woocommerce/woocommerce.php";}'
 mysql -uroot -proot -e "use wordpress; UPDATE ${TablePrefx}_options SET option_value = '${NEW_PLUGIN_ARRAY}' WHERE option_name = 'active_plugins';"
 exit
+
+# nginx, HTTPS /w lets encrypt
+# note, need a domain - get one from freenom
+sudo add-apt-repository ppa:certbot/certbot -y
+sudo apt-get update -y
+sudo apt-get install python-certbot-nginx -y
+sudo nginx -t
+sudo systemctl reload nginx
+sudo certbot --nginx -d $1 --keep-until-expiring --no-redirect --register-unsafely-without-email --agree-tos
+# sudo certbot renew --dry-run
